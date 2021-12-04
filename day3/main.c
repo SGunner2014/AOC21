@@ -2,12 +2,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-struct Node
-{
-    char is_valid;      // boolean, represents whether it should still be considered
-    unsigned int value; // char, represents number
-};
-
 void part1()
 {
     FILE *fp = fopen("input.txt", "r");
@@ -78,7 +72,8 @@ void part2()
         for (i = 11; i >= 0; i--)
         {
             current <<= 1;
-            current |= line[i] == '1' ? 1 : 0;
+            current += line[i] == '1' ? 1 : 0;
+            printf("~~%d~~\n", line[i]);
         }
 
         insert_value(tree, current, 12);
@@ -89,7 +84,7 @@ void part2()
 
     determine_rating(tree, 1, &first);
     determine_rating(tree, 0, &second);
-    printf("Solution to part 1: %u from %u, %u\n", (first * second), first, second);
+    printf("Solution to part 2: %u from %u, %u\n", (first * second), first, second);
 
     fclose(fp);
     free(line);
@@ -99,4 +94,6 @@ int main()
 {
     part1();
     part2();
+
+    return 0;
 }
