@@ -4,6 +4,7 @@
 
 typedef struct BingoCard
 {
+    int hasWon;
     int nums[25];
     int selected[25];
 } BingoCard;
@@ -39,7 +40,7 @@ int parse_called_nums(char *line, int *nums)
         {
             end = line;
             buffer[0] = '\0';
-            strncpy(buffer, start, (end - start));
+            strncat(buffer, start, (end - start));
             nums[counter] = atoi(buffer);
             start = end + 1;
             counter++;
@@ -49,7 +50,7 @@ int parse_called_nums(char *line, int *nums)
     }
 
     buffer[0] = '\0';
-    strncpy(buffer, start, (line - start));
+    strncat(buffer, start, (line - start));
     nums[counter] = atoi(buffer);
 
     free(buffer);
@@ -104,18 +105,18 @@ int call_card_number(BingoCard *card, int number)
     {
         int j;
         // Loop through rows and columns to see if we have any lines crossed off
-        for (i = 0; i < 5; i++)
+        for (j = 0; j < 5; j++)
         {
             // check it as a row
-            if (card->selected[(i * 5) + 0] && card->selected[(i * 5) + 1] && card->selected[(i * 5) + 2] &&
-                card->selected[(i * 5) + 3] && card->selected[(i * 5) + 4])
+            if (card->selected[(j * 5) + 0] && card->selected[(j * 5) + 1] && card->selected[(j * 5) + 2] &&
+                card->selected[(j * 5) + 3] && card->selected[(j * 5) + 4])
             {
                 hasWon = 1;
                 break;
             }
 
-            if (card->selected[i + (0 * 5)] && card->selected[i + (1 * 5)] && card->selected[i + (2 * 5)] &&
-                card->selected[i + (3 * 5)] && card->selected[i + (4 * 5)])
+            if (card->selected[j + (0 * 5)] && card->selected[j + (1 * 5)] && card->selected[j + (2 * 5)] &&
+                card->selected[j + (3 * 5)] && card->selected[j + (4 * 5)])
             {
                 hasWon = 1;
                 break;
@@ -179,10 +180,10 @@ void part1()
             {
                 innerCardCounter = 0;
                 cardCount++;
+                cards[cardCount - 1].hasWon = 0;
             }
             else
             {
-
                 parse_card_line(line, rowNums);
                 int i;
 
@@ -205,22 +206,27 @@ void part1()
     int i, j;
     int hasWon;
     int currentCalledNum;
+    int lastBoardWon;
     for (i = 0; i < calledNumsCount; i++)
     {
         currentCalledNum = calledNums[i];
         for (j = 0; j < cardCount; j++)
         {
-            hasWon = call_card_number(&cards[j], currentCalledNum);
-            if (hasWon)
+            if (!cards[j].hasWon)
             {
-                goto exit;
+                hasWon = call_card_number(&cards[j], currentCalledNum);
+                if (hasWon)
+                {
+                    lastBoardWon = j;
+                    cards[j].hasWon = hasWon;
+                }
             }
         }
     }
 
 exit:
 
-    printf("Has won: %d with called no. %d\n", hasWon, currentCalledNum);
+    printf("Has won: %d with called no. %d\n", cards[lastBoardWon].hasWon, currentCalledNum);
 
     fclose(fp);
     free(line);
