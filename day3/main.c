@@ -73,7 +73,6 @@ void part2()
         {
             current <<= 1;
             current += line[i] == '1' ? 1 : 0;
-            printf("~~%d~~\n", line[i]);
         }
 
         insert_value(tree, current, 12);
