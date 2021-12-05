@@ -1,6 +1,7 @@
 #include "BTree.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include <sys/time.h>
 
 void part1()
 {
@@ -56,6 +57,8 @@ void part1()
  */
 void part2()
 {
+    struct timeval st, et;
+    gettimeofday(&st, NULL);
     FILE *fp = fopen("input.txt", "r");
 
     char *line = NULL;
@@ -84,7 +87,9 @@ void part2()
     determine_rating(tree, 1, &first);
     determine_rating(tree, 0, &second);
     free_tree(tree);
+    gettimeofday(&et, NULL);
     printf("Solution to part 2: %u from %u, %u\n", (first * second), first, second);
+    printf("Executed in %lds, %dus.\n", et.tv_sec - st.tv_sec, et.tv_usec - st.tv_usec);
 
     fclose(fp);
     free(line);
