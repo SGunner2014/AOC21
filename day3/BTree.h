@@ -90,4 +90,16 @@ void determine_rating(BTreeNode *tree, int searchMode, unsigned int *value) {
   }
 }
 
+void free_tree(BTreeNode *tree) {
+  if (tree->left != NULL) {
+    free_tree(tree->left);
+  }
+
+  if (tree->right != NULL) {
+    free_tree(tree->right);
+  }
+
+  free(tree);
+}
+
 #endif

@@ -83,6 +83,7 @@ void part2()
 
     determine_rating(tree, 1, &first);
     determine_rating(tree, 0, &second);
+    free_tree(tree);
     printf("Solution to part 2: %u from %u, %u\n", (first * second), first, second);
 
     fclose(fp);
